@@ -45,7 +45,6 @@ def ask_openai():
         thread_id,
         role="user",
         content=user_input,
-        file_ids=user_files
         )
         # Run assistant on thread
         run = openai.beta.threads.runs.create(
@@ -70,7 +69,7 @@ def ask_openai():
                             args = json.loads(action.function.arguments) # Load arguments passed from the assistant
                             function_return = {"tool_call_id": action.id, "output": run_command(args['hostname'], args['command'])}
                             function_list.append(function_return)
-                        case 'print_working_dir_files': 
+                        case 'print_working_dir_files':
                             args = json.loads(action.function.arguments) # Load arguments passed from the assistant
                             # if args['path'] exists, use it, otherwise use empty string
                             if 'path' in args:
@@ -154,12 +153,12 @@ def upload_file():
     return jsonify({"file_id": list_files}), 200
 
 
-    
+
 def run_command(hostname, command):
 # Configuration variables
     username = os.environ.get('USERNAME_ENV_VAR')   # Replace with the SSH password
     password = os.environ.get('PASSWORD_ENV_VAR')   # Replace with the SSH username
-          
+
     port = 22   # Replace with the SSH port if different from the default
     # Create the SSH client
     ssh_client = paramiko.SSHClient()
@@ -173,7 +172,7 @@ def run_command(hostname, command):
         stdin, stdout, stderr = ssh_client.exec_command(command)
         # Read the standard output and print it
         output = stdout.read().decode().strip()
-        if output != "":           
+        if output != "":
           return (f"Success: {output}")
         else:
           output = stderr.read().decode().strip()
@@ -219,7 +218,7 @@ def read_file(path):
     except Exception as e:
         print(str(e))
         return str(e)
-    
+
 # Write contents to a given file path and return success or failure message
 def write_file(path, contents):
     try:
